@@ -50,5 +50,3 @@ function returnXml() {
 }
 
 app.listen(3001)
-// returnJson()
-returnXml()
