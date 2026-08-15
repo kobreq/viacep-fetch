@@ -9,44 +9,40 @@ app.get('/api/mensagem', (req, res) => {
     res.json({ texto: "Olá do Servidor!"})
 })
 
-function returnJson() {
-    app.get('/cep/:cep', async (req, res) => {
-        const { cep } = req.params
+app.get('/cep/:cep', async (req, res) => {
+    const { cep } = req.params
 
-        try {
-            const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json`)
-            const dados = await resposta.json()
+    try {
+        const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json`)
+        const dados = await resposta.json()
 
-            if(dados.erro) return res.status(404).json({ erro: "CEP não encontrado"})
+        if(dados.erro) return res.status(404).json({ erro: "CEP não encontrado"})
 
-            res.status(200).json(dados)
-        } 
+        res.status(200).json(dados)
+    } 
 
-        catch(err) {
-            res.status(500).json({ erro: "Erro de comunicação com VIACEP"})
-        }
-    })
-}
+    catch(err) {
+        res.status(500).json({ erro: "Erro de comunicação com VIACEP"})
+    }
+})
 
-function returnXml() {
-    app.get('/cep:cep', async (req, res) => {
-        const { cep } = req.params
+app.get('/cep/:cep/xml', async (req, res) => {
+    const { cep } = req.params
 
-        try {
-            const resposta = await fetch(`https://viacep.com.br/ws/${cep}/xml`)
-            const dados = await resposta.text()
-            const parser = new DOMParser()
-            const xmlDoc = parser.parseFromString(texto, "text/xml")
+    try {
+        const resposta = await fetch(`https://viacep.com.br/ws/${cep}/xml`)
+        const dados = await resposta.text()
 
-            if(dados.erro) return res.status(404).json({ erro: "CEP não encontrado"})
-            
-            parser.parseFromString(res.status(200).text(dados), "text/xml")
-        }
+        if(dados.includes('erro')) return res.status(404).json({ erro: "CEP não encontrado"})
+        
+        res.status(200).set('Content-Type', 'application/xml').send(dados)
+    }
 
-        catch(err) {
-            res.status(500).json({ erro: "Erro de comunicação com VIACEP"})
-        }
-    })
-}
+    catch(err) {
+        res.status(500).json({ erro: "Erro de comunicação com VIACEP"})
+    }
+})
 
-app.listen(3001)
+app.listen(3001, () => {
+    console.log('Servidor rodando na porta 3001')
+})
