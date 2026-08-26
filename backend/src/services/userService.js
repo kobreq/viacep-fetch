@@ -1,10 +1,7 @@
-const getAllUsers = async () => {
-    const mockUsers = [
-        { id: 1, name: 'João', email: 'joao@email.com' },
-        { id: 2, name: 'Marcos', email: 'marcos@email.com'}
-    ]
+const User = require('../models/User')  
 
-    return mockUsers
+const getAllUsers = async () => {
+    return await User.findAll()
 }
 
 module.exports = { getAllUsers }
