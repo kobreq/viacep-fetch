@@ -7,7 +7,7 @@ const searchUser = async (req, res) => {
     }
 
     catch (err) {
-        res.status(500).json({ err: 'Erro intero ao buscar usuários'})
+        res.status(500).json({ err: 'Erro interno ao buscar usuários'})
     }
 }
 
